@@ -1,20 +1,16 @@
 # Programa para demostrar métodos de ordenamiento
 
 def burbuja(lista):
-    # Recorre toda la lista varias veces
     for i in range(len(lista)):
         for j in range(0, len(lista) - i - 1):
             if lista[j] > lista[j + 1]:
-                # Intercambiar
                 lista[j], lista[j + 1] = lista[j + 1], lista[j]
     return lista
 
 def insercion(lista):
-    # Recorre desde el segundo elemento hasta el final
     for i in range(1, len(lista)):
         valor = lista[i]
         j = i - 1
-        # Mueve los elementos mayores hacia la derecha
         while j >= 0 and valor < lista[j]:
             lista[j + 1] = lista[j]
             j -= 1

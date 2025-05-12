@@ -1,9 +1,9 @@
 # Clase Nodo: Representa a cada cliente en la lista
 class Nodo:
     def __init__(self, cedula, nombre):
-        self.cedula = cedula         # Cedula del cliente
-        self.nombre = nombre         # Nombre del cliente
-        self.siguiente = None        # Apunta al siguiente nodo
+        self.cedula = cedula         
+        self.nombre = nombre         
+        self.siguiente = None        
 
 
 # Clase ListaCircular: Maneja la lista circular
