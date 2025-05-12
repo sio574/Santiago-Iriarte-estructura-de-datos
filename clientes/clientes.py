@@ -1,42 +1,31 @@
-# Clase Nodo: Representa a cada cliente en la lista
 class Nodo:
     def __init__(self, cedula, nombre):
         self.cedula = cedula         
         self.nombre = nombre         
         self.siguiente = None        
-
-
-# Clase ListaCircular: Maneja la lista circular
 class ListaCircular:
     def __init__(self):
-        self.inicio = None  # Variable que se ubica en el último nodo
-
-    # Método para insertar un nuevo cliente
+        self.inicio = None  
     def insertar_cliente(self, cedula, nombre):
-        nuevo = Nodo(cedula, nombre)  # Solo se puede crear la variable "nuevo"
+        nuevo = Nodo(cedula, nombre)  
         
         if self.inicio is None:
-            # Primer nodo: apunta a sí mismo y se vuelve el inicio
             nuevo.siguiente = nuevo
             self.inicio = nuevo
         else:
-            # Recorremos hasta llegar al último nodo
             temp = self.inicio
             while temp.siguiente != self.inicio:
                 temp = temp.siguiente
-            # Insertamos al final y actualizamos punteros
             temp.siguiente = nuevo
             nuevo.siguiente = self.inicio
-            self.inicio = nuevo  # La variable inicio se ubica en el nuevo último nodo
-
-    # Método para listar los clientes hacia la derecha
+            self.inicio = nuevo  
     def listar_clientes(self):
         if self.inicio is None:
             print("No hay clientes en la lista.")
             return
 
         print("Lista de clientes:")
-        temp = self.inicio.siguiente  # Empezamos desde el primer nodo
+        temp = self.inicio.siguiente  
         while True:
             print(f"Cédula: {temp.cedula}, Nombre: {temp.nombre}")
             if temp == self.inicio:
@@ -67,6 +56,4 @@ def menu():
             break
         else:
             print("Opción no válida. Intente de nuevo.")
-
-# Ejecutamos el menú
 menu()
