@@ -1,72 +1,82 @@
-# Clase Nodo: Representa a cada cliente en la lista
+import tkinter as tk
+from tkinter import messagebox
+
+# Clase nodo
 class Nodo:
     def __init__(self, cedula, nombre):
-        self.cedula = cedula         # Cedula del cliente
-        self.nombre = nombre         # Nombre del cliente
-        self.siguiente = None        # Apunta al siguiente nodo
+        self.cedula = cedula
+        self.nombre = nombre
+        self.siguiente = None
 
-
-# Clase ListaCircular: Maneja la lista circular
+# Clase lista circular
 class ListaCircular:
     def __init__(self):
-        self.inicio = None  # Variable que se ubica en el último nodo
+        self.inicio = None
 
-    # Método para insertar un nuevo cliente
     def insertar_cliente(self, cedula, nombre):
-        nuevo = Nodo(cedula, nombre)  # Solo se puede crear la variable "nuevo"
-        
+        nuevo = Nodo(cedula, nombre)
         if self.inicio is None:
-            # Primer nodo: apunta a sí mismo y se vuelve el inicio
-            nuevo.siguiente = nuevo
             self.inicio = nuevo
+            nuevo.siguiente = nuevo
         else:
-            # Recorremos hasta llegar al último nodo
             temp = self.inicio
             while temp.siguiente != self.inicio:
                 temp = temp.siguiente
-            # Insertamos al final y actualizamos punteros
             temp.siguiente = nuevo
             nuevo.siguiente = self.inicio
-            self.inicio = nuevo  # La variable inicio se ubica en el nuevo último nodo
+            self.inicio = nuevo
+        messagebox.showinfo("Éxito", "Cliente insertado correctamente")
 
-    # Método para listar los clientes hacia la derecha
     def listar_clientes(self):
         if self.inicio is None:
-            print("No hay clientes en la lista.")
-            return
-
-        print("Lista de clientes:")
-        temp = self.inicio.siguiente  # Empezamos desde el primer nodo
+            return "No hay clientes."
+        resultado = ""
+        temp = self.inicio
         while True:
-            print(f"Cédula: {temp.cedula}, Nombre: {temp.nombre}")
+            resultado += f"Cédula: {temp.cedula} - Nombre: {temp.nombre}\n"
+            temp = temp.siguiente
             if temp == self.inicio:
                 break
-            temp = temp.siguiente
+        return resultado
 
+# Interfaz gráfica
+class Aplicacion:
+    def __init__(self, root):
+        self.lista = ListaCircular()
 
-# --------------------- MENÚ PRINCIPAL ---------------------
-def menu():
-    lista = ListaCircular()
+        root.title("Lista Circular de Clientes")
+        root.geometry("400x300")
 
-    while True:
-        print("\n--- Menú de Clientes ---")
-        print("1. Insertar Cliente")
-        print("2. Listar Clientes hacia la derecha")
-        print("3. Salir")
+        tk.Label(root, text="Cédula:").pack()
+        self.cedula_entry = tk.Entry(root)
+        self.cedula_entry.pack()
 
-        opcion = input("Seleccione una opción: ")
+        tk.Label(root, text="Nombre:").pack()
+        self.nombre_entry = tk.Entry(root)
+        self.nombre_entry.pack()
 
-        if opcion == "1":
-            cedula = input("Ingrese la cédula del cliente: ")
-            nombre = input("Ingrese el nombre del cliente: ")
-            lista.insertar_cliente(cedula, nombre)
-        elif opcion == "2":
-            lista.listar_clientes()
-        elif opcion == "3":
-            print("Saliendo de la aplicación...")
-            break
+        tk.Button(root, text="Insertar Cliente", command=self.insertar).pack(pady=5)
+        tk.Button(root, text="Listar Clientes", command=self.listar).pack(pady=5)
+        tk.Button(root, text="Salir", command=root.quit).pack(pady=5)
+
+        self.resultado = tk.Text(root, height=10, width=50)
+        self.resultado.pack()
+
+    def insertar(self):
+        cedula = self.cedula_entry.get()
+        nombre = self.nombre_entry.get()
+        if cedula and nombre:
+            self.lista.insertar_cliente(cedula, nombre)
+            self.cedula_entry.delete(0, tk.END)
+            self.nombre_entry.delete(0, tk.END)
         else:
-            print("Opción no válida. Intente de nuevo.")
+            messagebox.showwarning("Error", "Debes ingresar cédula y nombre")
 
-# Ejecutamos el menú
-menu()
+    def listar(self):
+        resultado = self.lista.listar_clientes()
+        self.resultado.delete("1.0", tk.END)
+        self.resultado.insert(tk.END, resultado)
+
+root = tk.Tk()
+app = Aplicacion(root)
+root.mainloop()

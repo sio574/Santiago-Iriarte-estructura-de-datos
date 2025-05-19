@@ -1,63 +1,72 @@
-# Programa para demostrar métodos de ordenamiento
+import tkinter as tk
+from tkinter import messagebox
 
-def burbuja(lista):
-    # Recorre toda la lista varias veces
-    for i in range(len(lista)):
-        for j in range(0, len(lista) - i - 1):
-            if lista[j] > lista[j + 1]:
-                # Intercambiar
-                lista[j], lista[j + 1] = lista[j + 1], lista[j]
-    return lista
+def burbuja(arr):
+    n = len(arr)
+    for i in range(n):
+        for j in range(0, n - i - 1):
+            if arr[j] > arr[j + 1]:
+                arr[j], arr[j + 1] = arr[j + 1], arr[j]
+    return arr
 
-def insercion(lista):
-    # Recorre desde el segundo elemento hasta el final
-    for i in range(1, len(lista)):
-        valor = lista[i]
+def insercion(arr):
+    for i in range(1, len(arr)):
+        key = arr[i]
         j = i - 1
-        # Mueve los elementos mayores hacia la derecha
-        while j >= 0 and valor < lista[j]:
-            lista[j + 1] = lista[j]
+        while j >= 0 and arr[j] > key:
+            arr[j + 1] = arr[j]
             j -= 1
-        lista[j + 1] = valor
-    return lista
+        arr[j + 1] = key
+    return arr
 
-def quicksort(lista):
-    if len(lista) <= 1:
-        return lista
+def quicksort(arr):
+    if len(arr) <= 1:
+        return arr
     else:
-        pivote = lista[0]
-        menores = [x for x in lista[1:] if x < pivote]
-        mayores = [x for x in lista[1:] if x >= pivote]
+        pivote = arr[0]
+        menores = [x for x in arr[1:] if x < pivote]
+        mayores = [x for x in arr[1:] if x >= pivote]
         return quicksort(menores) + [pivote] + quicksort(mayores)
 
-def mostrar_menu():
-    print("\n--- MENÚ DE ORDENAMIENTO ---")
-    print("1. Método Burbuja")
-    print("2. Método de Inserción")
-    print("3. Método Quicksort")
-    print("4. Salir")
+class OrdenamientoGUI:
+    def __init__(self, root):
+        root.title("Métodos de Ordenamiento")
+        root.geometry("400x300")
 
-# Ciclo principal
-while True:
-    mostrar_menu()
-    opcion = input("Selecciona una opción: ")
+        tk.Label(root, text="Ingresa los números separados por coma:").pack()
+        self.entrada = tk.Entry(root, width=40)
+        self.entrada.pack()
 
-    if opcion in ['1', '2', '3']:
-        numeros = input("Ingresa los números separados por coma: ")
-        lista = [int(x) for x in numeros.split(",")]
+        tk.Button(root, text="Burbuja", command=self.metodo_burbuja).pack(pady=5)
+        tk.Button(root, text="Inserción", command=self.metodo_insercion).pack(pady=5)
+        tk.Button(root, text="Quicksort", command=self.metodo_quicksort).pack(pady=5)
+        tk.Button(root, text="Salir", command=root.quit).pack(pady=5)
 
-        if opcion == '1':
-            resultado = burbuja(lista.copy())
-            print("Lista ordenada (Burbuja):", resultado)
-        elif opcion == '2':
-            resultado = insercion(lista.copy())
-            print("Lista ordenada (Inserción):", resultado)
-        elif opcion == '3':
-            resultado = quicksort(lista.copy())
-            print("Lista ordenada (Quicksort):", resultado)
+        self.resultado = tk.Text(root, height=6, width=50)
+        self.resultado.pack()
 
-    elif opcion == '4':
-        print("Saliendo del programa")
-        break
-    else:
-        print("Opción inválida, intenta de nuevo.")
+    def obtener_lista(self):
+        try:
+            return list(map(int, self.entrada.get().split(',')))
+        except:
+            messagebox.showerror("Error", "Ingresa solo números separados por coma.")
+            return None
+
+    def mostrar_resultado(self, metodo, lista):
+        if lista is not None:
+            ordenada = metodo(lista.copy())
+            self.resultado.delete("1.0", tk.END)
+            self.resultado.insert(tk.END, f"Resultado: {ordenada}")
+
+    def metodo_burbuja(self):
+        self.mostrar_resultado(burbuja, self.obtener_lista())
+
+    def metodo_insercion(self):
+        self.mostrar_resultado(insercion, self.obtener_lista())
+
+    def metodo_quicksort(self):
+        self.mostrar_resultado(quicksort, self.obtener_lista())
+
+root = tk.Tk()
+app = OrdenamientoGUI(root)
+root.mainloop()
