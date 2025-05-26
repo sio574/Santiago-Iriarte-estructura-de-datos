@@ -40,27 +40,30 @@ class Interfaz:
         self.arbol = ArbolBinario()
         self.master = master
         master.title("Árbol Binario Ordenado")
+        master.configure(bg="#e6f0ff")  # Fondo azul clarito
 
-        self.label = tk.Label(master, text="Dato a insertar:")
-        self.label.pack()
+        estilo_boton = {"bg": "#3399ff", "fg": "white", "activebackground": "#0066cc", "font": ("Arial", 10, "bold")}
 
-        self.entrada = tk.Entry(master)
-        self.entrada.pack()
+        self.label = tk.Label(master, text="Dato a insertar:", bg="#e6f0ff", font=("Arial", 11))
+        self.label.pack(pady=(10, 0))
 
-        self.boton_insertar = tk.Button(master, text="Insertar", command=self.insertar_dato)
-        self.boton_insertar.pack()
+        self.entrada = tk.Entry(master, font=("Arial", 11))
+        self.entrada.pack(pady=5)
 
-        self.boton_inorden = tk.Button(master, text="In Orden", command=self.mostrar_inorden)
-        self.boton_inorden.pack()
+        self.boton_insertar = tk.Button(master, text="Insertar", command=self.insertar_dato, **estilo_boton)
+        self.boton_insertar.pack(pady=3)
 
-        self.boton_postorden = tk.Button(master, text="Post Orden", command=self.mostrar_postorden)
-        self.boton_postorden.pack()
+        self.boton_inorden = tk.Button(master, text="In Orden", command=self.mostrar_inorden, **estilo_boton)
+        self.boton_inorden.pack(pady=3)
 
-        self.boton_preorden = tk.Button(master, text="Pre Orden", command=self.mostrar_preorden)
-        self.boton_preorden.pack()
+        self.boton_postorden = tk.Button(master, text="Post Orden", command=self.mostrar_postorden, **estilo_boton)
+        self.boton_postorden.pack(pady=3)
 
-        self.salida = tk.Text(master, height=10, width=40)
-        self.salida.pack()
+        self.boton_preorden = tk.Button(master, text="Pre Orden", command=self.mostrar_preorden, **estilo_boton)
+        self.boton_preorden.pack(pady=3)
+
+        self.salida = tk.Text(master, height=10, width=40, bg="#f0f8ff", font=("Courier", 11), fg="#003366")
+        self.salida.pack(pady=10)
 
     def insertar_dato(self):
         try:
@@ -86,7 +89,6 @@ class Interfaz:
         self.salida.delete("1.0", tk.END)
         self.salida.insert(tk.END, "Pre Orden:\n" + " ".join(map(str, recorrido)))
 
-# Ejecutar la app
 if __name__ == "__main__":
     root = tk.Tk()
     app = Interfaz(root)
